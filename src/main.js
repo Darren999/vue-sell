@@ -4,12 +4,13 @@ import Vue from 'vue'
 import App from './App'
 import VueRouter from 'vue-router'
 import Routes from './router/router'
-import '@/common/style/index.scss'
+import '@/common/stylus/index.styl'
+import VueResource from 'vue-resource'
 
 Vue.config.productionTip = false
 
 Vue.use(VueRouter)
-
+Vue.use(VueResource)
 /* eslint-disable no-new */
 
 const router = new VueRouter({
