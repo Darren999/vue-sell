@@ -30,24 +30,28 @@
                   <span class="now">¥{{food.price}}</span>
                   <span class="old" v-show="food.oldPrice">¥{{food.oldPrice}}</span>
                 </div>
+                <div class="cartcontrol-wrapper">
+                  <cartcontrol :food="food"></cartcontrol>
+                </div>
               </div>
             </li>
           </ul>
         </li>
       </ul>
     </div>
-    <shopcart :deliveryPrice="seller.deliveryPrice" :minPrice="seller.minPrice"></shopcart>
+    <shopcart :selectFoods="selectFoods" :deliveryPrice="seller.deliveryPrice" :minPrice="seller.minPrice"></shopcart>
   </div>
 </template>
 
 <script type="text/ecmascript-6">
   import BScroll from 'better-scroll'
   import shopcart from '@/components/shopcart/shopcart'
+  import cartcontrol from '@/components/cartcontrol/cartcontrol'
 
   export default {
     props: {
-      seller:{
-        type: Object,
+      seller: {
+        type: Object
       }
     },
     data() {
@@ -55,22 +59,30 @@
         goods: [],
         listHeight: [],
         scrollY: 0,
-
+        selectedFood: {}
       };
     },
-    computed:{
+    computed: {
       currentIndex() {
-        let height1 = 0;
-        let height2 = 0;
-        for(let i=0; i<this.listHeight.length; i++){
-          height1 = this.listHeight[i];
-          height2 = this.listHeight[i+1];
-          if(!height2 || (this.scrollY>=height1 && this.scrollY<height2)){
+        for (let i = 0; i < this.listHeight.length; i++) {
+          let height1 = this.listHeight[i];
+          let height2 = this.listHeight[i + 1];
+          if (!height2 || (this.scrollY >= height1 && this.scrollY < height2)) {
             return i;
           }
         }
-
         return 0;
+      },
+      selectFoods() {
+        let foods = [];
+        this.goods.forEach((good) => {
+          good.foods.forEach((food) => {
+            if (food.count) {
+              foods.push(food);
+            }
+          });
+        });
+        return foods;
       }
     },
     created() {
@@ -108,19 +120,18 @@
       },
       _calculateHeight() {
         let foodlist = this.$refs.foodsWrapper.getElementsByClassName('food-list-hook');
-        // console.log("foodlist:"+foodlist+"length:"+foodlist.length);
         let height = 0;
         this.listHeight.push(height);
         for(let i=0; i < foodlist.length; i++){
           let item = foodlist[i];
           height += item.clientHeight;
-          // console.log("i:"+i+" height:"+height);
           this.listHeight.push(height);
         }
       },
     },
     components: {
-      shopcart
+      shopcart,
+      cartcontrol
     }
   }
 </script>
@@ -227,5 +238,8 @@
               text-decoration: line-through
               font-size: 10px
               color: rgb(147, 153, 159)
-              vertical-align: center
+          .cartcontrol-wrapper
+            position: absolute
+            right: 0
+            bottom: 12px
 </style>
