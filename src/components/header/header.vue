@@ -30,38 +30,40 @@
     <div class="background">
       <img v-bind:src="seller.avatar" width="100%" height="100%">
     </div>
-    <div v-show="detailShow" class="detail">
-      <div class="detail-wrapper clearfix">
-        <div class="detail-main">
-          <h1 class="name">{{seller.name}}</h1>
-          <div class="star-wrapper">
-            <star v-bind:size="48" v-bind:score="seller.score"></star>
-          </div>
-          <div class="title">
-            <div class="line"></div>
-            <div class="text">优惠信息</div>
-            <div class="line"></div>
-          </div>
-          <ul v-if="seller.supports" class="supports">
-            <li class="support-item" v-for="item in seller.supports">
-              <span class="icon" v-bind:class="classMap[item.type]"></span>
-              <span class="text">{{item.description}}</span>
-            </li>
-          </ul>
-          <div class="title">
-            <div class="line"></div>
-            <div class="text">商家公告</div>
-            <div class="line"></div>
-          </div>
-          <div class="bulletin">
-            <p class="content">{{seller.bulletin}}</p>
+    <transition name="fade">
+      <div v-show="detailShow" class="detail">
+        <div class="detail-wrapper clearfix">
+          <div class="detail-main">
+            <h1 class="name">{{seller.name}}</h1>
+            <div class="star-wrapper">
+              <star v-bind:size="48" v-bind:score="seller.score"></star>
+            </div>
+            <div class="title">
+              <div class="line"></div>
+              <div class="text">优惠信息</div>
+              <div class="line"></div>
+            </div>
+            <ul v-if="seller.supports" class="supports">
+              <li class="support-item" v-for="item in seller.supports">
+                <span class="icon" v-bind:class="classMap[item.type]"></span>
+                <span class="text">{{item.description}}</span>
+              </li>
+            </ul>
+            <div class="title">
+              <div class="line"></div>
+              <div class="text">商家公告</div>
+              <div class="line"></div>
+            </div>
+            <div class="bulletin">
+              <p class="content">{{seller.bulletin}}</p>
+            </div>
           </div>
         </div>
+        <div class="detail-close">
+          <i class="icon-close" v-on:click="hideDetail"></i>
+        </div>
       </div>
-      <div class="detail-close">
-        <i class="icon-close" v-on:click="hideDetail"></i>
-      </div>
-    </div>
+    </transition>
   </div>
 </template>
 
@@ -97,7 +99,7 @@
 </script>
 
 <style lang="stylus" rel="stylesheet/stylus">
-  @import "../../common/stylus/mixin.styl";
+  @import "../../common/stylus/mixin";
 
   .header
     position: relative
@@ -215,14 +217,19 @@
       filter: blur(10px)
     .detail
       position: fixed
-      z-index: 100
-      top: 0
-      left: 0
+      left:0
+      top:0
+      overflow: auto
       width: 100%
       height: 100%
-      overflow: auto
-      background: rgba(7, 17, 27, 0.8)
-      backdrop-filter: blur(10px)
+      z-index: 100
+      opacity 1
+      background rgba(7,17,27,0.8)//渐变结束后的最终效果
+      &.fade-enter-active, &.fade-leave-active//渐变的进入和退出都历时0.5s
+        transition all 0.5s
+      &.fade-enter, &.fade-leave-to//定义进入前和退出后样式，即透明无色背景。
+        opacity 0
+        background rgba(7,17,27,0)
       .detail-wrapper
         width: 100%
         min-height: 100%
