@@ -223,13 +223,13 @@
       width: 100%
       height: 100%
       z-index: 100
-      opacity 1
-      background rgba(7,17,27,0.8)//渐变结束后的最终效果
+      opacity: 1
+      background: rgba(7,17,27,0.8)//渐变结束后的最终效果
       &.fade-enter-active, &.fade-leave-active//渐变的进入和退出都历时0.5s
-        transition all 0.5s
+        transition: all 0.5s
       &.fade-enter, &.fade-leave-to//定义进入前和退出后样式，即透明无色背景。
-        opacity 0
-        background rgba(7,17,27,0)
+        opacity: 0
+        background: rgba(7,17,27,0)
       .detail-wrapper
         width: 100%
         min-height: 100%
